@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<project name="marat4" default="build" basedir=".">
+<project name="mimaki03" default="build" basedir=".">
 	<property name="tomcat.dir" value="/usr/share/tomcat6" />
 	<property name="src.dir"  value="src" />
 	<property name="src.java" value="${src.dir}/java" />
