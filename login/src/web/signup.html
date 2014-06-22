@@ -1,0 +1,59 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>
+    <title>ユーザ登録 | EventSpiral</title>
+    <link rel="stylesheet" type="text/css" href="css/default.css"></link>
+    <script type="text/javascript" src="dwr/engine.js"></script>
+    <script type="text/javascript" src="dwr/interface/SignUpController.js"></script>
+    <script type="text/javascript" src="js/jquery-1.7.2.min.js"></script>
+    <script type="text/javascript" src="js/jquery.cookie.js"></script>
+    <script type="text/javascript" src="js/jquery.serialize.js"></script>
+    <script>
+function signup(){
+  var form = $('#signup_form').serializeJson();
+  if(form.pass != form.passVerify){
+    updateErrorMessage("パスワードが一致しません", null);
+    return;
+  }
+
+  SignUpController.execute(form, {
+    callback: function(data){
+      updateErrorMessage("ユーザ登録が完了しました．");
+    },
+    exceptionHandler: updateErrorMessage
+  });
+}
+
+function updateErrorMessage(message, exception){
+  $('#error_msg').text(message);
+}
+    </script>
+  </head>
+  <body>
+    <form id="signup_form">
+      <table>
+        <tr>
+          <th>ユーザID</th>
+          <td><input type="text" name="userId" /></td>
+        </tr>
+        <tr>
+          <th>パスワード</th>
+          <td><input type="password" name="pass" /></td>
+        </tr>
+        <tr>
+          <th>パスワードを再入力</th>
+          <td><input type="password" name="passVerify" /></td>
+        </tr>
+        <tr>
+          <td></td>
+          <td><input type="button" value="登録" onclick="signup()" /></td>
+        </tr>
+      </table>
+    </form>
+    <hr />
+    <div id="error_msg" class="error"></div>
+    <a href="index.html">ログイン</a>
+  </body>
+</html>

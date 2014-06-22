@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<project name="marat4" default="build" basedir=".">
+	<property name="tomcat.dir" value="/usr/share/tomcat6" />
+	<property name="src.dir"  value="src" />
+	<property name="src.java" value="${src.dir}/java" />
+	<property name="src.web"  value="${src.dir}/web" />
+	<property name="src.conf" value="${src.dir}/conf" />
+	<property name="lib.dir" value="lib" />
+	<property name="dest.dir"  value="./temp" />
+  	<property name="dest.java" value="${dest.dir}/classes" />
+  	<property name="dest.web"  value="${dest.dir}/web" />
+  	<property name="dest.conf" value="${dest.dir}/conf" />
+  	<property name="dest.webinf" value="${dest.conf}/WEB-INF" />
+  	<property name="war.file"  value="/usr/share/tomcat6/webapps/${ant.project.name}.war" />
+  	<path id="base.classpath">
+  		<fileset dir="${lib.dir}" includes="*.jar" />
+  		<fileset dir="${tomcat.dir}/lib" includes="*.jar" />
+  	</path>
+	<target name="prepare">
+		<mkdir dir="${dest.dir}"  />
+		<mkdir dir="${dest.java}" />
+		<mkdir dir="${dest.web}"  />
+		<mkdir dir="${dest.conf}" />
+		<mkdir dir="${dest.webinf}" />
+	</target>
+	<target name="compile" depends="prepare">
+		<javac destdir="${dest.java}" debug="on" includeantruntime="false" encoding="utf-8">
+			<src path="${src.java}" />
+			<classpath refid="base.classpath" />
+		</javac>
+	</target>
+	<target name="copy-resources" depends="prepare">
+		<copy todir="${dest.web}">
+			<fileset dir="${src.web}" />
+		</copy>
+		<copy todir="${dest.webinf}">
+			<fileset dir="${src.conf}" />
+		</copy>
+	</target>
+	<target name="build" depends="compile, copy-resources">
+		<war destfile="${war.file}" webxml="${dest.webinf}/web.xml">
+			<lib dir="${lib.dir}" />
+			<classes dir="${dest.java}" />
+			<fileset dir="${dest.web}" />
+			<fileset dir="${dest.conf}" />
+		</war>
+	</target>
+	<target name="deploy" depends="build">
+		<delete dir="${dest.dir}" />
+		<copy file="${war.file}" todir="${tomcat.dir}/webapps" />
+	</target>
+	<target name="clean">
+		<delete dir="${dest.dir}" />
+	</target>
+</project>

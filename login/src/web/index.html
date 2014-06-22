@@ -1,0 +1,57 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>
+    <title>ログイン | EventSpiral</title>
+    <link rel="stylesheet" type="text/css" href="css/default.css"></link>
+    <script type="text/javascript" src="dwr/engine.js"></script>
+    <script type="text/javascript" src="dwr/interface/LoginController.js"></script>
+    <script type="text/javascript" src="dwr/interface/LogoutController.js"></script>
+    <script type="text/javascript" src="js/jquery-1.7.2.min.js"></script>
+    <script type="text/javascript" src="js/jquery.cookie.js"></script>
+    <script type="text/javascript" src="js/jquery.serialize.js"></script>
+    <script>
+var loggedInForm = '<form id="login_form">'
+        + '  <span>ようこそ <span class="uid"></span></span>'
+        + '  <input type="button" onclick="logout()" value="ログアウト"></input>'
+        + '</form>'
+
+function login(){
+  var form;
+  form = $('#login_form').serializeJson();
+  LoginController.execute(form, {
+    callback: function(data) {
+      $('#login_wrapper').html(loggedInForm);
+      $('#menu_wrapper').text(data.role);
+    },
+    exceptionHandler: function(msg, err){
+      $('#header_error_msg').text(msg);
+    }
+  });
+}
+
+function logout(){
+  LogoutController.execute({
+    callback: function(){
+      location.reload();
+    }
+  });
+}
+    </script>
+  </head>
+  <body>
+    <div id="logo"></div>
+    <div id="login_wrapper">
+      <form id="login_form">
+        ユーザID: <input type="text" name="userId"></input>
+        パスワード: <input type="password" name="pass"></input>
+        <input type="button" onclick="login()" value="ログイン"></input>
+        <span id="header_error_msg" class="error"></span>
+      </form>
+    </div>
+    <hr />
+    <div id="menu_wrapper"></div>
+    <a href="signup.html">ユーザ登録</a>
+  </body>
+</html>
